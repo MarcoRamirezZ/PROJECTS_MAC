@@ -89,6 +89,10 @@ node_colors = [colors[(my_colors[i])] for i in ordered_nodes]
 # Gráfica
 fig = plt.figure(figsize=(6,6))
 ax = fig.add_axes([0,0,1,1])
+ax.axhline(1.5, lw=75, zorder=1, color='lightgrey')
+ax.axhline(7.5, lw=75, zorder=1, color='lightgrey')
+ax.axvline(1.5, lw=75, zorder=1, color='lightgrey')
+ax.axvline(7.5, lw=75, zorder=1, color='lightgrey')
 
 nx.draw(G, pos, with_labels=True, node_size=700, node_color=node_colors, font_size=10, font_color="black", font_weight="bold", arrowsize=20, ax=ax)
 
