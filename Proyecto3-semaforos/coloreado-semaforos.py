@@ -1,6 +1,6 @@
 import networkx as nx           #para generar grafos
 import matplotlib.pyplot as plt #para graficar
-import random
+import random                   #para aleatorizar el colroeado de los nodos
 
 #---------------------------------- algoritmos --------------------------------------------------------------------
 def traffic_colors(G):
@@ -23,8 +23,10 @@ def traffic_colors(G):
         print("Diccionario:", colors_dict)
         print("----------------------------------------------------------")
 
-    return colors_dict
+    ordered_nodes = list(G.nodes())
+    node_colors = [colors[(colors_dict[i])] for i in ordered_nodes]
 
+    return node_colors
 
 #------------------------- Main --------------------------------------------------------
 #Grafo dirigido
@@ -32,7 +34,6 @@ G = nx.DiGraph()
 
 #Cada row representa una interseccion, y los semaforos que tiene
 nodes = ['{}_{}'.format(i,j) for j in range(1,5) for i in range(1,5)] 
-#nodes += ['{}_{}'.format(i,j) for j in range(3,5) for i in range(5,9)]
 
 edges = [ ('5_4', '1_3'), ('5_4', '1_4'), ('5_4', '1_2'),
           ('5_3', '1_1'), ('5_3', '1_3'), ('5_3', '1_4'),
@@ -81,11 +82,6 @@ print("----------------------------------------------------------")
 print("NUMERO DE COLORES", len(colors))
 print("----------------------------------------------------------")
 
-my_colors = traffic_colors(G)
-
-ordered_nodes = list(G.nodes())
-node_colors = [colors[(my_colors[i])] for i in ordered_nodes]
-
 # Gráfica
 fig = plt.figure(figsize=(6,6))
 ax = fig.add_axes([0,0,1,1])
@@ -94,7 +90,12 @@ ax.axhline(7.5, lw=75, zorder=1, color='lightgrey')
 ax.axvline(1.5, lw=75, zorder=1, color='lightgrey')
 ax.axvline(7.5, lw=75, zorder=1, color='lightgrey')
 
-nx.draw(G, pos, with_labels=True, node_size=700, node_color=node_colors, font_size=10, font_color="black", font_weight="bold", arrowsize=20, ax=ax)
+nx.draw(G, pos, with_labels=True, node_size=700, node_color=traffic_colors(G), font_size=10, font_color="black", font_weight="bold", arrowsize=20, ax=ax)
 
-# Mostrar el grafo
+#Iterate 10 times to simulate time passing by and traffic lights being recoded
+for _ in range(10):
+    plt.pause(5)
+    nx.draw(G, pos, with_labels=True, node_size=700, node_color=traffic_colors(G), font_size=10, font_color="black", font_weight="bold", arrowsize=20, ax=ax)
+
+# Show the final plot
 plt.show()
